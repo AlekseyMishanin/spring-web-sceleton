@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="WARN" name="mishanin" packages="com.mishanin.plugin.log4j2" monitorInterval="30">
+    <Appenders>
+        <Console name="ConsoleAppender" target="SYSTEM_OUT">
+            <PatternLayout pattern="%date{DEFAULT}
+            %highlight{%-5level}{FATAL=bg_red, ERROR=red, WARN=yellow, INFO=green} [%t] %c{2}: %m%n"/>
+            <IgnoreExceptionFilter/>
+        </Console>
+    </Appenders>
+    <Loggers>
+        <Root level="info">
+            <AppenderRef ref="ConsoleAppender"/>
+        </Root>
+    </Loggers>
+</Configuration>
