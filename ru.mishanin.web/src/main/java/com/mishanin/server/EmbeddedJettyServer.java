@@ -36,6 +36,10 @@ public class EmbeddedJettyServer {
     private WebAppContext configureAndGetWebAppContext() {
         WebAppContext webAppContext = new WebAppContext();
         webAppContext.setContextPath("/");
+        // If you have overridden variable JETTY_HOME, there may be problems when loading classes in webdefault.xml
+        webAppContext.setDefaultsDescriptor(null);
+        // You can configure an additional web.xml
+//        webAppContext.setOverrideDescriptor();
         webAppContext.setBaseResource(getBaseResource());
         webAppContext.setConfigurations(new Configuration[]{
                 new WebXmlConfiguration(),
