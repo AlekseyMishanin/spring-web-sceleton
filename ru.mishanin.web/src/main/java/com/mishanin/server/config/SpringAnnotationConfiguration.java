@@ -27,6 +27,6 @@ public class SpringAnnotationConfiguration extends AnnotationConfiguration {
         map.put(WebApplicationInitializer.class.getName(), initializerClasses);
 
         context.setAttribute(CLASS_INHERITANCE_MAP, map);
-        _classInheritanceHandler = new ClassInheritanceHandler(map);
+        this._classInheritanceHandler = new ClassInheritanceHandler(map);
     }
 }

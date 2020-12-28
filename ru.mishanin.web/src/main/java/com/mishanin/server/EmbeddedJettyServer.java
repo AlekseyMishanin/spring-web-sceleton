@@ -10,7 +10,6 @@ import org.eclipse.jetty.server.ServerConnector;
 import org.eclipse.jetty.util.resource.Resource;
 import org.eclipse.jetty.webapp.Configuration;
 import org.eclipse.jetty.webapp.WebAppContext;
-import org.eclipse.jetty.webapp.WebXmlConfiguration;
 
 import java.net.MalformedURLException;
 import java.net.URI;
@@ -33,16 +32,15 @@ public class EmbeddedJettyServer {
         server.join();
     }
 
+    @SneakyThrows
     private WebAppContext configureAndGetWebAppContext() {
         WebAppContext webAppContext = new WebAppContext();
         webAppContext.setContextPath("/");
         // If you have overridden variable JETTY_HOME, there may be problems when loading classes in webdefault.xml
         webAppContext.setDefaultsDescriptor(null);
-        // You can configure an additional web.xml
-//        webAppContext.setOverrideDescriptor();
         webAppContext.setBaseResource(getBaseResource());
+        webAppContext.setExtraClasspath("target/classes");
         webAppContext.setConfigurations(new Configuration[]{
-                new WebXmlConfiguration(),
                 new SpringAnnotationConfiguration(configuration.getInitializers())
         });
 
