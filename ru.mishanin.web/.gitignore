@@ -2,3 +2,6 @@ target
 deploy
 .idea/
 *.iml
+*.keystore
+*.crt
+secret.properties

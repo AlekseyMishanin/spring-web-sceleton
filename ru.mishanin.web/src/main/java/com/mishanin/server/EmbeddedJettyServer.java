@@ -2,12 +2,13 @@ package com.mishanin.server;
 
 import com.mishanin.server.config.EmbeddedJettyConfiguration;
 import com.mishanin.server.config.SpringAnnotationConfiguration;
-import lombok.Builder;
+import com.mishanin.server.handlers.LogHandler;
 import lombok.SneakyThrows;
-import org.eclipse.jetty.server.Connector;
-import org.eclipse.jetty.server.Server;
-import org.eclipse.jetty.server.ServerConnector;
+import org.eclipse.jetty.server.*;
+import org.eclipse.jetty.util.ProcessorUtils;
 import org.eclipse.jetty.util.resource.Resource;
+import org.eclipse.jetty.util.ssl.SslContextFactory;
+import org.eclipse.jetty.util.thread.QueuedThreadPool;
 import org.eclipse.jetty.webapp.Configuration;
 import org.eclipse.jetty.webapp.WebAppContext;
 
@@ -19,15 +20,19 @@ import java.net.URL;
 /**
  * Embedded jetty server
  */
-@Builder
 public class EmbeddedJettyServer {
-    @Builder.Default
-    private final Server server = new Server();
+
+    private final Server server;
     private final EmbeddedJettyConfiguration configuration;
 
+    public EmbeddedJettyServer(EmbeddedJettyConfiguration configuration) {
+        this.server = new Server(getThreadPool());
+        this.configuration = configuration;
+    }
+
     public void run() throws Exception {
-        server.setConnectors(new Connector[]{getServerConnector()});
-        server.setHandler(configureAndGetWebAppContext());
+        server.addConnector(getServerConnector());
+        server.setHandler(new LogHandler());
         server.start();
         server.join();
     }
@@ -47,8 +52,44 @@ public class EmbeddedJettyServer {
         return webAppContext;
     }
 
+    /**
+     * Create and configure a ThreadPool.
+     *
+     * @return QueuedThreadPool
+     */
+    private QueuedThreadPool getThreadPool() {
+        QueuedThreadPool threadPool = new QueuedThreadPool();
+        threadPool.setName("jetty-server");
+        return threadPool;
+    }
+
     private ServerConnector getServerConnector() {
-        ServerConnector connector = new ServerConnector(server);
+
+        int cores = ProcessorUtils.availableProcessors();
+
+        // There is a little moment where the acceptor thread is not accepting new connections
+        // because it is busy wrapping the just accepted connection to pass it to the SelectorManager.
+        // Configuring more than one acceptor thread may be beneficial: when one acceptor thread accepts
+        // one connection, another acceptor thread can take over accepting connections.
+        int acceptors = Math.max(1, Math.min(4, cores / 8));
+
+        // A single selector can easily manage up to 1000-5000 sockets.
+        int selectors = Math.max(1, cores / 2);
+
+        HttpConfiguration httpConfig = new HttpConfiguration();
+        // Add the SecureRequestCustomizer because we are using TLS. For localhost we need to remove sniHost check.
+        httpConfig.addCustomizer(new SecureRequestCustomizer(false));
+        HttpConnectionFactory http11 = new HttpConnectionFactory(httpConfig);
+        SslContextFactory.Server sslContextFactory = new SslContextFactory.Server();
+        // TODO read external variables in a separate method
+        sslContextFactory.setKeyStorePath(System.getProperty("keystore.path"));
+        sslContextFactory.setKeyStorePassword(System.getProperty("keystore.password"));
+        // JKS for test
+        sslContextFactory.setKeyStoreType("JKS");
+        SslConnectionFactory tls = new SslConnectionFactory(sslContextFactory, http11.getProtocol());
+
+        // It is possible to configure more than one ServerConnector, each listening on a different port.
+        ServerConnector connector = new ServerConnector(server, acceptors, selectors, tls, http11);
         connector.setHost(configuration.getHost());
         connector.setPort(configuration.getPort());
         return connector;
