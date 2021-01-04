@@ -1,2 +1,2 @@
 #!/bin/bash
-java -jar ./target/sws.jar -Dorg.eclipse.jetty.util.log.class=org.eclipse.jetty.util.log.StdErrLog  -Dorg.eclipse.jetty.LEVEL=DEBUG
+java -Dkeystore.path=/Users/alekseymishanin/project/test/ru.mishanin.web/jetty-test.keystore -Dkeystore.password=server -jar ./target/sws.jar
