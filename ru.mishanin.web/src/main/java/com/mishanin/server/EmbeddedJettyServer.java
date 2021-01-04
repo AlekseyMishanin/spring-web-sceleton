@@ -32,7 +32,9 @@ public class EmbeddedJettyServer {
 
     public void run() throws Exception {
         server.addConnector(getServerConnector());
-        server.setHandler(new LogHandler());
+        server.setHandler(configureAndGetWebAppContext());
+        server.setDumpAfterStart(true);
+        server.setDumpBeforeStop(true);
         server.start();
         server.join();
     }
