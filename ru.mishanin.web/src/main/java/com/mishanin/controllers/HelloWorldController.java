@@ -13,7 +13,7 @@ import static org.springframework.http.HttpStatus.OK;
 @RequestMapping(Urls.HelloWorld.MAIN)
 public class HelloWorldController {
 
-    @Value("${user.name}")
+    @Value("${app.user.name}")
     private String username;
 
     @GetMapping

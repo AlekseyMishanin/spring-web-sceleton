@@ -11,8 +11,6 @@ public class App {
     public static void main(String[] args) throws Exception {
 
         EmbeddedJettyConfiguration config = EmbeddedJettyConfiguration.builder()
-                .enableTLS(true)
-                .enableDebug(true)
                 .port(9090)
                 .initializers(List.of(WebInitializer.class, WebSecurityInitializer.class))
                 .build();

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Configuration status="WARN" name="mishanin" packages="com.mishanin.plugin.log4j2" monitorInterval="30">
+<Configuration status="WARN" name="mishanin" packages="com.mishanin.logger" monitorInterval="30">
     <Appenders>
         <Console name="ConsoleAppender" target="SYSTEM_OUT">
             <PatternLayout pattern="%date{DEFAULT}
