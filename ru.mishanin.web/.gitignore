@@ -1,4 +1,9 @@
 target
 deploy
+logs
 .idea/
 *.iml
+*.keystore
+*.crt
+secret.properties
+

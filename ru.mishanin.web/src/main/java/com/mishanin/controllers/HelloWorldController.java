@@ -1,17 +1,30 @@
 package com.mishanin.controllers;
 
+import com.mishanin.model.Product;
+import lombok.extern.log4j.Log4j2;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
+import static org.springframework.http.HttpStatus.OK;
+
+@Log4j2
 @Controller
-@RequestMapping("hello")
+@RequestMapping(Urls.HelloWorld.MAIN)
 public class HelloWorldController {
+
+    @Value("${app.user.name}")
+    private String username;
 
     @GetMapping
     @ResponseBody
     private String hello() {
-        return "Hello my friend";
+        return "Hi from " + username;
+    }
+
+    @GetMapping(Urls.HelloWorld.PRODUCT)
+    @ResponseStatus(OK)
+    private void getProduct(@RequestBody(required = false) Product product) {
+        log.info(product);
     }
 }

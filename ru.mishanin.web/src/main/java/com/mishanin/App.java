@@ -8,18 +8,14 @@ import com.mishanin.server.config.EmbeddedJettyConfiguration;
 import java.util.List;
 
 public class App {
-
     public static void main(String[] args) throws Exception {
 
-        EmbeddedJettyConfiguration configuration = EmbeddedJettyConfiguration.builder()
-                .host("127.0.0.1")
+        EmbeddedJettyConfiguration config = EmbeddedJettyConfiguration.builder()
                 .port(9090)
                 .initializers(List.of(WebInitializer.class, WebSecurityInitializer.class))
                 .build();
 
-        EmbeddedJettyServer.builder()
-                .configuration(configuration)
-                .build()
-                .run();
+        EmbeddedJettyServer server = new EmbeddedJettyServer(config);
+        server.run();
     }
 }

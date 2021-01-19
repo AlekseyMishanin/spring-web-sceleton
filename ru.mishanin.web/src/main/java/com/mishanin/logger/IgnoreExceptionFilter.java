@@ -1,4 +1,4 @@
-package com.mishanin.plugin.log4j2;
+package com.mishanin.logger;
 
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.Marker;
