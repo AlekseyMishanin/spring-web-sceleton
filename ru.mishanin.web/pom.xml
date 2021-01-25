@@ -28,6 +28,7 @@
         <jackson.version>2.9.6</jackson.version>
         <jetty.version>10.0.0</jetty.version>
         <servlet-api.version>4.0.1</servlet-api.version>
+        <appache.common.version>3.11</appache.common.version>
     </properties>
 
     <dependencies>
@@ -51,6 +52,13 @@
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <version>${lombok.version}</version>
+        </dependency>
+
+        <!-- Apache Commons -->
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>${appache.common.version}</version>
         </dependency>
 
         <!-- Jackson -->
@@ -104,6 +112,11 @@
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-context</artifactId>
+            <version>${spring.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-aspects</artifactId>
             <version>${spring.version}</version>
         </dependency>
 

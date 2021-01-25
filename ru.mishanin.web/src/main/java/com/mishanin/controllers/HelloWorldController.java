@@ -1,5 +1,6 @@
 package com.mishanin.controllers;
 
+import com.mishanin.model.ConfigurableApple;
 import com.mishanin.model.Product;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Value;
@@ -26,5 +27,12 @@ public class HelloWorldController {
     @ResponseStatus(OK)
     private void getProduct(@RequestBody(required = false) Product product) {
         log.info(product);
+    }
+
+    @GetMapping(Urls.HelloWorld.AOP_APPLE)
+    @ResponseBody
+    private String getApple() {
+        ConfigurableApple apple = new ConfigurableApple();
+        return apple.getAppleSerialNumber();
     }
 }
